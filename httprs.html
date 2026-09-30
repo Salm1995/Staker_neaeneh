@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة الملصق الإلكتروني | Fuel Sticker System</title>
+    <!-- الخطوط والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --accent: #00ffcc;
+            --bg: #060a17;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(0, 242, 254, 0.15);
+            --text: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        /* خلفية التوهج الهندسي للملصق الذكي */
+        .bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.1) 0%, rgba(6, 10, 23, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* الهيدر */
+        header {
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(6, 10, 23, 0.8);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        .badge-system {
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* القسم الرئيسي */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px 30px;
+            flex: 1;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            color: var(--primary);
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            background: linear-gradient(135deg, #ffffff 30%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 35px;
+            line-height: 1.8;
+        }
+
+        /* زر التسجيل الفوري للملصق */
+        .btn-fast-redirect {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 22px 50px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(0, 242, 254, 0.35);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-fast-redirect:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 18px 45px rgba(0, 242, 254, 0.55);
+        }
+
+        .btn-fast-redirect i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-fast-redirect:hover i {
+            transform: translateX(-8px);
+        }
+
+        /* خطوة توضيحية لنظام الستيكر */
+        .sticker-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            width: 100%;
+            margin: 45px auto 20px;
+            padding: 0 20px;
+        }
+
+        .step-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: right;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 242, 254, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-text h4 {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .step-text p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* نافذة تحويل الستيكر (Redirect Overlay) */
+        .redirect-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(6, 10, 23, 0.96);
+            backdrop-filter: blur(25px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.35s ease;
+        }
+
+        .redirect-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loader-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            max-width: 440px;
+            width: 90%;
+            position: relative;
+        }
+
+        .spinner-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+        }
+
+        .spinner {
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(0, 242, 254, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .spinner-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .redirect-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .redirect-subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* شريط التقدم */
+        .progress-bar-container {
+            width: 100%;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            border-radius: 10px;
+            transition: width 0.08s linear;
+        }
+
+        /* الفوتر */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--card-border);
+            background: rgba(6, 10, 23, 0.9);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.9); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .btn-fast-redirect { padding: 18px 35px; font-size: 1.1rem; flex-width: 100%; }
+            .loader-box { padding: 30px 20px; }
+            .sticker-steps { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <!-- الشريط العلوي -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>منظومة الملصق الإلكتروني</span>
+        </div>
+        <div class="badge-system">
+            <i class="fa-solid fa-microchip"></i> Fuel Sticker System
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="hero">
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            بوابة تسجيل الملصق الإلكتروني الذكي للوقود
+        </div>
+
+        <h1>حجز وتثبيت الملصق الإلكتروني (Sticker)</h1>
+        
+        <p class="subtitle">
+            انقر على زر "رابط التسجيل" أدناه للبدء في ملء الاستمارة الرسمية وتثبيت الملصق الإلكتروني المركب على مركبتك لتجهيز الوقود بشكل ذكي.
+        </p>
+
+        <!-- زر التسجيل المباشر -->
+        <button class="btn-fast-redirect" onclick="startFastRedirect()">
+            <span>رابط التسجيل</span>
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <!-- توضيح سريع لمراحل الملصق -->
+        <div class="sticker-steps">
+            <div class="step-box">
+                <div class="step-icon">
+                    <i class="fa-solid fa-file-pen"></i>
+                </div>
+                <div class="step-text">
+                    <h4>1. ملء الاستمارة</h4>
+                    <p>إدخال بيانات المركبة والمالك بدقة</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-icon">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div class="step-text">
+                    <h4>2. تأكيد الموعد</h4>
+                    <p>اختيار منفذ التثبيت والموعد المناسب</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-icon">
+                    <i class="fa-solid fa-id-card-clip"></i>
+                </div>
+                <div class="step-text">
+                    <h4>3. تثبيت الستيكر</h4>
+                    <p>تثبيت الملصق الذكي على الزجاج الأمامي</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- شاشة التحويل الاحترافية عند الضغط -->
+    <div class="redirect-overlay" id="redirectOverlay">
+        <div class="loader-box">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <i class="fa-solid fa-qrcode spinner-icon"></i>
+            </div>
+            <div class="redirect-title">جاري التحويل...</div>
+            <div class="redirect-subtitle">
+                يتم توجيهك الآن بأمان وسرعة إلى الاستمارة الرسمية لتسجيل ملصق الوقود الإلكتروني
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الفوتر -->
+    <footer>
+        جميع الحقوق محفوظة &copy; 2026 | منظومة التجهيز الذكي بالوقود (Fuel Sticker System)
+    </footer>
+
+    <!-- سكريبت التحويل السريع -->
+    <script>
+        const targetURL = "https://fuel-sticker.opdc.oil.gov.iq/?fbclid=IwdGRjcAUpvBJjbGNrBSm8EGV4dG4DYWVtAjExAHBkb2YFc3J0YwZhcHBfaWQMMzUwNjg1NTMxNzI4AAEefxWcCveN4M72uZ9VsMkxq_Kx7q6kt-wYCKVEIx3ecPiSRKub5C44TJJa8i0_aem_5s_hMJKcUnGXBd3SWRJv1g";
+
+        function startFastRedirect() {
+            const overlay = document.getElementById('redirectOverlay');
+            const progressBar = document.getElementById('progressBar');
+            
+            // إظهار شاشة التحويل السريع
+            overlay.classList.add('active');
+
+            // محاكاة تحويل فائق السرعة
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 12;
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    // التوجيه المباشر إلى المنظومة الرسمية
+                    window.location.href = targetURL;
+                }
+            }, 50); // تحويل سريع جداً في نصف ثانية تقريباً
+        }
+    </script>
+</body>
+</html>
